@@ -23,7 +23,7 @@ class Transaction extends Model
 
    //declare fillable
    protected $fillable = [
-       'appoint,ent_id',
+       'appointment_id',
        'fee_doctor',
        'fee_specialist',
        'fee_hospital',
@@ -34,4 +34,11 @@ class Transaction extends Model
        'updated_at',
        'deleted_at',
    ];
+
+   // one to many
+   public function appointment()
+
+   {    //2 parameter (path model,field foreign key,field primary key form table hasMany/hasOne in TypeUser.php)
+       return $this->BelongsTo('App\Models\MasterData\Appointment', 'appointment_id', 'id');
+   }
 }
