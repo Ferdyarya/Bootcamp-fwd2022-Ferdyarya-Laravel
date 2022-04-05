@@ -16,7 +16,7 @@ class StoreConsultationRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -27,12 +27,9 @@ class StoreConsultationRequest extends FormRequest
     public function rules()
     {
         return [
-            'consultation_id' =>[
-                'required', 'integer', 
-                ],
-            'name' =>[
-                'required', 'string', 'max:255',
-                ],
+            'name' => [
+                'required', 'string', 'max:255', 'unique:consultation',
+            ],
         ];
     }
 }

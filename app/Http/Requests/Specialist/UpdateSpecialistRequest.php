@@ -5,6 +5,7 @@ namespace App\Http\Requests\Specialist;
 use \App\Http\Model\Operational\Specialist;
 //use Gate;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
 
 class UpdateSpecialistRequest extends FormRequest
@@ -16,7 +17,7 @@ class UpdateSpecialistRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -27,15 +28,12 @@ class UpdateSpecialistRequest extends FormRequest
     public function rules()
     {
         return [
-            'specialist_id' =>[
-                'required', 'integer', 
-                ],
-            'name' =>[
+            'name' => [
+                'required', 'string', 'max:255', Rule::unique('specialist')->ignore($this->specialist),
+            ],
+            'price' => [
                 'required', 'string', 'max:255',
-                ],
-            'price' =>[
-                'required', 'string', 'max:255',
-                ],
+            ],
         ];
     }
 }

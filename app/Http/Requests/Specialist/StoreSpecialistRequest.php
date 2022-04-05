@@ -16,7 +16,7 @@ class StoreSpecialistRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -27,15 +27,12 @@ class StoreSpecialistRequest extends FormRequest
     public function rules()
     {
         return [
-            'specialist_id' =>[
-                'required', 'integer', 
-                ],
-            'name' =>[
+            'name' => [
+                'required', 'string', 'max:255', 'unique:specialist',
+            ],
+            'price' => [
                 'required', 'string', 'max:255',
-                ],
-            'price' =>[
-                'required', 'string', 'max:255',
-                ],
+            ],
             
         ];
         
