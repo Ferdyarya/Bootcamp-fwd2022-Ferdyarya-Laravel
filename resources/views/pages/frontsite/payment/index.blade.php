@@ -336,7 +336,8 @@
                         <a
                             href="booking-success.html"
                             class="bg-[#0D63F3] text-white px-10 py-3 rounded-full text-center"
-                            x-show="payment.length">
+                            x-show="payment.length"
+                            >
                             Pay Now
                         </a>
 
@@ -345,7 +346,8 @@
                         -->
                         <span
                             x-show="!payment.length"
-                            class="bg-[#C0CADA] text-[#808997] cursor-not-allowed px-10 py-3 rounded-full text-center">
+                            class="bg-[#C0CADA] text-[#808997] cursor-not-allowed px-10 py-3 rounded-full text-center"
+                            >
                             Pay Now
                         </span>
                     </div>
