@@ -1,26 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-            @include('includes.frontsite.meta')
-    <title> @yield('title') | MeetDoctor</title>
+    <head>
 
-    @stack('before-style')
-        @include('includes.frontsite.style')
-    @stack('after-style')
+        @include('includes.frontsite.meta')
 
+        <title>@yield('title') | MeetDoctor</title>
 
-  </head>
-  <body> 
-    @include('component.frontsite.header')
-        @yield('content')
-    @include('component.frontsite.footer')
+        @stack('before-style')
+            @include('includes.frontsite.style')
+        @stack('after-style')
 
-    @stack('before-style')
-        @include('includes.frontsite.script')
-    @stack('after-style')
+    </head>
+    <body>
 
-    <!-- modals -->
-    <!-- if you have a modals create here -->
+        @include('sweetalert::alert')
 
-  </body>
+        @include('components.frontsite.header')
+            @yield('content')
+
+        @include('components.frontsite.footer')
+
+        @stack('before-script')
+            @include('includes.frontsite.script')
+        @stack('after-script')
+
+        {{-- modals --}}
+        {{-- if you have a modal, create here --}}
+
+    </body>
 </html>
