@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Backsite;
 
 use App\Http\Controllers\Controller;
 
-
 // use library here
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -17,7 +16,7 @@ use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 
 // use everything here
-// use Gate;
+use Gate;
 use Auth;
 
 // use model here
@@ -49,11 +48,13 @@ class UserController extends Controller
      */
     public function index()
     {
+        abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         $user = User::orderBy('created_at', 'desc')->get();
         $type_user = TypeUser::orderBy('name', 'asc')->get();
-        $role = Role::all()->pluck('title', 'id');
+        $roles = Role::all()->pluck('title', 'id');
 
-        return view('pages.backsite.management-access.user.index', compact('user', 'role', 'type_user'));
+        return view('pages.backsite.management-access.user.index', compact('user', 'roles', 'type_user'));
     }
 
     /**
@@ -72,19 +73,19 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreUserRequest $request_user, Request $request)
+    public function store(StoreUserRequest $request)
     {
         // get all request from frontsite
-        $data = $request_user->all();
+        $data = $request->all();
 
         // hash password
-        $data['password'] = Hash::make($data['password']);
+        $data['password'] = Hash::make($data['email']);
 
         // store to database
         $user = User::create($data);
 
         // sync role by users select
-        $user->role()->sync($request_user->input('role', []));
+        $user->role()->sync($request->input('role', []));
 
         // save to detail user , to set type user
         $detail_user = new DetailUser;
@@ -104,6 +105,8 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
+        abort_if(Gate::denies('user_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         $user->load('role');
 
         return view('pages.backsite.management-access.user.show', compact('user'));
@@ -117,6 +120,8 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
+        abort_if(Gate::denies('user_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         $role = Role::all()->pluck('title', 'id');
         $type_user = TypeUser::orderBy('name', 'asc')->get();
         $user->load('role');
@@ -131,16 +136,16 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateUserRequest $request_user, Request $request, User $user)
+    public function update(UpdateUserRequest $request, User $user)
     {
         // get all request from frontsite
-        $data = $request_user->all();
+        $data = $request->all();
 
         // update to database
         $user->update($data);
 
         // update roles
-        $user->role()->sync($request_user->input('role', []));
+        $user->role()->sync($request->input('role', []));
 
         // save to detail user , to set type user
         $detail_user = DetailUser::find($user['id']);
@@ -159,6 +164,8 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        abort_if(Gate::denies('user_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         $user->forceDelete();
 
         alert()->success('Success Message', 'Successfully deleted user');

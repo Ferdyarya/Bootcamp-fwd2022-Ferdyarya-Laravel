@@ -2,14 +2,13 @@
 
 namespace App\Http\Requests\User;
 
-use \App\Http\Model\User;
-//use Gate;
+use App\Models\User;
+use Gate;
 use Illuminate\Foundation\Http\FormRequest;
 use Symfony\Component\HttpFoundation\Response;
 
-//this commend just for requests update
-use Illuminate\validation\Rule;
-
+// this rule only at update request
+use Illuminate\Validation\Rule;
 
 class UpdateUserRequest extends FormRequest
 {
@@ -20,7 +19,8 @@ class UpdateUserRequest extends FormRequest
      */
     public function authorize()
     {
-        //create middleware from kenel at here
+        abort_if(Gate::denies('user_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         return true;
     }
 
@@ -32,17 +32,14 @@ class UpdateUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' =>[
-                'required', 'min:3', 'max:255',
-                ],
-                'email' =>[
+            'name' => [
+                'required', 'string', 'max:255',
+            ],
+            'email' => [
                 'required', 'email', 'max:255', Rule::unique('users')->ignore($this->user),
-                //rule unique only work for other record id
-                ],
-                'password' =>[
-                'required', 'min:6', 'max:255',
-                ],
-                //at validation for role this here
+                // Rule unique only works for other record id
+            ],
+            // add validation for role this here
         ];
     }
 }

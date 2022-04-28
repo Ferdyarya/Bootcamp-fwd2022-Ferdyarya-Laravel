@@ -2,10 +2,13 @@
 
 namespace App\Http\Requests\Role;
 
-use \App\Http\Model\ManagementAccess\Role;
-//use Gate;
+use App\Models\ManagementAccess\Role;
+use Gate;
 use Illuminate\Foundation\Http\FormRequest;
 use Symfony\Component\HttpFoundation\Response;
+
+// this rule only at update request
+use Illuminate\Validation\Rule;
 
 class UpdateRoleRequest extends FormRequest
 {
@@ -16,6 +19,8 @@ class UpdateRoleRequest extends FormRequest
      */
     public function authorize()
     {
+        abort_if(Gate::denies('role_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         return true;
     }
 
@@ -27,9 +32,9 @@ class UpdateRoleRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' =>[
-                'required', 'min:3', 'max:255',
-                ],
+            'title' => [
+                'required', 'string', 'max:255', Rule::unique('role')->ignore($this->role),
+            ],
         ];
     }
 }
