@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 {{-- set title --}}
-@section('title', 'Appointment')
+@section('title', 'Transaction')
 
 @section('content')
 
@@ -28,12 +28,12 @@
             {{-- breadcumb --}}
             <div class="content-header row">
                 <div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
-                    <h3 class="content-header-title mb-0 d-inline-block">Appointment</h3>
+                    <h3 class="content-header-title mb-0 d-inline-block">Transaction</h3>
                     <div class="row breadcrumbs-top d-inline-block">
                         <div class="breadcrumb-wrapper col-12">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{ route('backsite.dashboard.index') }}">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Appointment</li>
+                                <li class="breadcrumb-item active">Transaction</li>
                             </ol>
                         </div>
                     </div>
@@ -41,7 +41,7 @@
             </div>
 
             {{-- table card --}}
-            @can('appointment_table')
+            @can('transaction_table')
                 <div class="content-body">
                     <section id="table-home">
                         <!-- Zero configuration table -->
@@ -49,7 +49,7 @@
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h4 class="card-title">Appointment List</h4>
+                                        <h4 class="card-title">Transaction List</h4>
                                         <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
                                         <div class="heading-elements">
                                             <ul class="list-inline mb-0">
@@ -70,40 +70,26 @@
                                                             <th>Date</th>
                                                             <th>Doctor</th>
                                                             <th>Patient</th>
-                                                            <th>Consultation</th>
-                                                            <th>Level</th>
-                                                            <th>Date</th>
-                                                            <th>Time</th>
-                                                            <th>Status</th>
+                                                            <th>Fee Doctor</th>
+                                                            <th>Fee Specialist</th>
+                                                            <th>Fee Hospital</th>
+                                                            <th>Sub total</th>
+                                                            <th>Vat</th>
+                                                            <th>Total</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @forelse($appointment as $key => $appointment_item)
-                                                            <tr data-entry-id="{{ $appointment_item->id }}">
-                                                                <td>{{ isset($appointment_item->created_at) ? date("d/m/Y H:i:s",strtotime($appointment_item->created_at)) : '' }}</td>
-                                                                <td>{{ $appointment_item->doctor->name ?? '' }}</td>
-                                                                <td>{{ $appointment_item->user->name ?? '' }}</td>
-                                                                <td>{{ $appointment_item->consultation->name ?? '' }}</td>
-                                                                <td>
-                                                                    @if($appointment_item->level == 1)
-                                                                        <span class="badge badge-info">{{ 'Low' }}</span>
-                                                                    @elseif($appointment_item->level == 2)
-                                                                        <span class="badge badge-warning">{{ 'Medium' }}</span>
-                                                                    @elseif($appointment_item->level == 3)
-                                                                        <span class="badge badge-danger">{{ 'High' }}</span>
-                                                                    @endif
-                                                                </td>
-                                                                <td>{{ isset($appointment_item->date) ? date("d/m/Y",strtotime($appointment_item->date)) : '' }}</td>
-                                                                <td>{{ isset($appointment_item->time) ? date("H:i:s",strtotime($appointment_item->time)) : '' }}</td>
-                                                                <td>
-                                                                    @if($appointment_item->status == 1)
-                                                                        <span class="badge badge-success">{{ 'Payment Completed' }}</span>
-                                                                    @elseif($appointment_item->status == 2)
-                                                                        <span class="badge badge-warning">{{ 'Waiting Payment' }}</span>
-                                                                    @else
-                                                                        <span>{{ 'N/A' }}</span>
-                                                                    @endif
-                                                                </td>
+                                                        @forelse($transaction as $key => $transaction_item)
+                                                            <tr data-entry-id="{{ $transaction_item->id }}">
+                                                                <td>{{ isset($transaction_item->created_at) ? date("d/m/Y H:i:s",strtotime($transaction_item->created_at)) : '' }}</td>
+                                                                <td>{{ $transaction_item->appointment->doctor->name ?? '' }}</td>
+                                                                <td>{{ $transaction_item->appointment->user->name ?? '' }}</td>
+                                                                <td>{{ 'IDR '.number_format($transaction_item->fee_doctor) ?? '' }}</td>
+                                                                <td>{{ 'IDR '.number_format($transaction_item->fee_specialist) ?? '' }}</td>
+                                                                <td>{{ 'IDR '.number_format($transaction_item->fee_hospital) ?? '' }}</td>
+                                                                <td>{{ 'IDR '.number_format($transaction_item->sub_total) ?? '' }}</td>
+                                                                <td>{{ 'IDR '.number_format($transaction_item->vat) ?? '' }}</td>
+                                                                <td>{{ 'IDR '.number_format($transaction_item->total) ?? '' }}</td>
                                                             </tr>
                                                         @empty
                                                             {{-- not found --}}
@@ -114,11 +100,12 @@
                                                             <th>Date</th>
                                                             <th>Doctor</th>
                                                             <th>Patient</th>
-                                                            <th>Consultation</th>
-                                                            <th>Level</th>
-                                                            <th>Date</th>
-                                                            <th>Time</th>
-                                                            <th>Status</th>
+                                                            <th>Fee Doctor</th>
+                                                            <th>Fee Specialist</th>
+                                                            <th>Fee Hospital</th>
+                                                            <th>Sub total</th>
+                                                            <th>Vat</th>
+                                                            <th>Total</th>
                                                         </tr>
                                                     </tfoot>
                                                 </table>

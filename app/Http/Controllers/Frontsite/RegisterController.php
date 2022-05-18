@@ -1,18 +1,24 @@
 <?php
 
-namespace App\Http\Controllers\Backsite;
+namespace App\Http\Controllers\Frontsite;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 
 // use library here
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\DB;
 
 // use everything here
-use Gate;
+// use Gate;
 use Auth;
 
-class DashboardController extends Controller
+// use model here
+use App\Models\User;
+
+// thirdparty package
+
+class RegisterController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -31,9 +37,7 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        abort_if(Gate::denies('dashboard_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        return view('pages.backsite.dashboard.index');
+        return view('pages.frontsite.success.signup-success');
     }
 
     /**
