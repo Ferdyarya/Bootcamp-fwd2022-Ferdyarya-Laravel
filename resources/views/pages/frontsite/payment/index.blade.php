@@ -362,12 +362,7 @@
                         <!--
                         button when payment is empty.
                         -->
-                        <span
-                            x-show="!payment.length"
-                            class="bg-[#C0CADA] text-[#808997] cursor-not-allowed px-10 py-3 rounded-full text-center"
-                            >
-                            Pay Now
-                        </span>
+                        
                     </div>
                 </form>
             </div>

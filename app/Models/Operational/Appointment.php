@@ -39,7 +39,7 @@ class Appointment extends Model
     public function doctor()
 
     {    //2 parameter (path model,field foreign key,field primary key form table hasMany/hasOne in TypeUser.php)
-        return $this->BelongsTo('App\Models\MasterData\Doctor', 'doctor_id', 'id');
+        return $this->BelongsTo('App\Models\Operational\Doctor', 'doctor_id', 'id');
     }
 
     // one to many
